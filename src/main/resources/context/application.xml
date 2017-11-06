@@ -10,6 +10,8 @@
        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
+    <import resource="db.xml"/>
+
     <context:property-placeholder file-encoding="UTF-8" location="classpath:settings.properties"/>
 
     <bean class="org.springframework.web.client.RestTemplate"/>
@@ -18,8 +20,7 @@
     <task:executor id="executor" pool-size="5"/>
     <task:scheduler id="scheduler" pool-size="10"/>
 
-    <import resource="db.xml"/>
-    <import resource="mvc.xml"/>
+
     <context:annotation-config/>
 
     <context:component-scan base-package="xtr.task">

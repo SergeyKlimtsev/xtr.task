@@ -34,36 +34,38 @@ class Settings extends React.Component {
         const {url, keyWords, city, submitSettings} = this.props;
         return <div className="content">
             <Row>
-                <Col>
+                <div>
                     URL
-                </Col>
-                <Col>
+                </div>
+                <div>
                     <FormControl value={url}
                                  onChange={this.onChangeUrl}/>
-                </Col>
+                </div>
             </Row>
             <Row>
-                <Col>
+                <div>
                     Ключевые слова для поиска
-                </Col>
-                <Col>
+                </div>
+                <div>
                     <FormControl value={keyWords}
                                  onChange={this.onChangeKeyWords}/>
-                </Col>
+                </div>
             </Row>
             <Row>
-                <Col>
+                <div>
                     Город
-                </Col>
-                <Col>
+                </div>
+                <div>
                     <FormControl value={city}
                                  onChange={this.onChangeCity}/>
-                </Col>
+                </div>
             </Row>
             <Row>
-                <ButtonToolbar>
-                    <Button onClick={submitSettings}>Сохранить настройки</Button>
-                </ButtonToolbar>
+                <div style={{paddingTop:20}}>
+                    <ButtonToolbar>
+                        <Button onClick={submitSettings}>Сохранить настройки</Button>
+                    </ButtonToolbar>
+                </div>
             </Row>
         </div>
     };

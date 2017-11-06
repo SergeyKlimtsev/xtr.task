@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 import xtr.task.json.VacanciesHolder;
 import xtr.task.mappers.toEntity.VacancyToEntity;
 import xtr.task.properties.PropertiesProvider;
@@ -35,14 +36,17 @@ public class FetchImpl implements Fetch {
     @Scheduled(fixedDelay = 10800000)
     @Override
     public void fetchVacancies() {
-        final VacanciesHolder vacanciesHolder = restTemplate.getForObject(properties.getUrl(), VacanciesHolder.class, getQueryParams());
+        final VacanciesHolder vacanciesHolder = restTemplate.getForObject(createUrl(), VacanciesHolder.class);
         vacancyService.addAll(vacancyMapper.transform(vacanciesHolder.getItems()));
     }
 
-    private Map<String, String> getQueryParams() {
-        final Map<String, String> params = new HashMap<>();
-        params.put("area", properties.getCity());
-        params.put("text ", properties.getKeyWords());
-        return params;
+
+    private String createUrl() {
+        return UriComponentsBuilder.fromHttpUrl(properties.getUrl())
+                .queryParam("text", String.format("%s %s", properties.getKeyWords(), properties.getCity()))
+                .queryParam("per_page", 100)
+                .build()
+                .toString();
+
     }
 }

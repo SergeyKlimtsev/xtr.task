@@ -20,7 +20,7 @@ public interface EmployerDAO extends JpaRepository<Employer, Integer> {
     Employer save(Employer user);
 
     @Override
-    Employer findOne(Integer integer);
+    Employer getOne(Integer integer);
 
     @Override
     @Query("SELECT e FROM Employer e")

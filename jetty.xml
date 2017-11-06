@@ -1,0 +1,23 @@
+<Configure id="Server" class="org.eclipse.jetty.server.Server">
+    <!--<New id="datasource" class="org.eclipse.jetty.plus.jndi.Resource">
+        <Arg></Arg>
+        <Arg>jdbc/main</Arg>
+        <Arg>
+            <New class="org.h2.jdbcx.JdbcDataSource">
+                <Set name="url">jdbc:h2:~/test;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;INIT=runscript from 'classpath:sql/init.sql'</Set>
+                <Set name="user">sa</Set>
+            </New>
+        </Arg>
+    </New>-->
+    <New id="datasource" class="org.eclipse.jetty.plus.jndi.Resource">
+        <Arg></Arg>
+        <Arg>jdbc/main</Arg>
+        <Arg>
+            <New class="org.postgresql.ds.PGSimpleDataSource">
+                <Set name="url">jdbc:postgresql://localhost:5432/usg</Set>
+                <Set name="user">user</Set>
+                <Set name="password">password</Set>
+            </New>
+        </Arg>
+    </New>
+</Configure>

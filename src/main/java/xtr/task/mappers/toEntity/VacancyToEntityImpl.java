@@ -1,4 +1,4 @@
-package xtr.task.mappers;
+package xtr.task.mappers.toEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

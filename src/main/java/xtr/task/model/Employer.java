@@ -1,5 +1,6 @@
 package xtr.task.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,12 +15,12 @@ import java.util.List;
 @Table(name = "employer")
 @Data
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
-public class Employer  {
+public class Employer {
 
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column
@@ -34,6 +35,6 @@ public class Employer  {
     @Column
     private String street;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "employer")
     private List<Vacancy> vacancies;
 }

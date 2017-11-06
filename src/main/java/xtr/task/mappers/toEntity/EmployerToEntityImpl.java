@@ -1,4 +1,4 @@
-package xtr.task.mappers;
+package xtr.task.mappers.toEntity;
 
 import org.springframework.stereotype.Component;
 import xtr.task.json.EmployerJson;

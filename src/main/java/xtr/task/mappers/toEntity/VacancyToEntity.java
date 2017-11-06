@@ -1,6 +1,7 @@
-package xtr.task.mappers;
+package xtr.task.mappers.toEntity;
 
 import xtr.task.json.VacancyJson;
+import xtr.task.mappers.Mapper;
 import xtr.task.model.Vacancy;
 
 

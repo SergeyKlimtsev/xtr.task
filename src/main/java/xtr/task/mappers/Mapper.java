@@ -1,8 +1,5 @@
 package xtr.task.mappers;
 
-import xtr.task.json.VacancyJson;
-import xtr.task.model.Vacancy;
-
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +16,10 @@ public interface Mapper<I, O> {
         if (vacancies == null) {
             return null;
         }
-        return vacancies.stream().map(this::transform).collect(Collectors.toList());
+        return vacancies
+                .stream()
+                .map(this::transform)
+                .collect(Collectors.toList());
     }
 
 }

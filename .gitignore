@@ -1,2 +1,4 @@
 .idea
 *.iml
+/frontEnd/node_modules/
+*.log

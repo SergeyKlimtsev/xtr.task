@@ -1,5 +1,6 @@
 package xtr.task.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,11 +15,11 @@ import javax.persistence.*;
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Vacancy {
 
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column
@@ -37,5 +38,6 @@ public class Vacancy {
     private String url;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "employer_id")
     private Employer employer;
 }

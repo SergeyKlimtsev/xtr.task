@@ -1,5 +1,6 @@
 package xtr.task.service;
 
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -44,7 +45,7 @@ public class VacancyServiceImpl implements VacancyService {
     @Transactional
     @Override
     public List<Vacancy> addAll(List<Vacancy> vacancies) {
-        final List<Employer> employers = vacancies.stream()
+        val employers = vacancies.stream()
                 .map(Vacancy::getEmployer)
                 .collect(Collectors.toList());
         employerRepository.saveAll(employers);
@@ -73,7 +74,7 @@ public class VacancyServiceImpl implements VacancyService {
     @Nonnull
     @Override
     public Vacancy get(int id) throws NotFoundException {
-        final Vacancy vacancy = repository.get(id);
+        val vacancy = repository.get(id);
         if (vacancy == null) {
             throw new NotFoundException(String.format("Vacancy for id=n% doesn't found", id));
         }

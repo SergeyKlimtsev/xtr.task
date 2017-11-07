@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class PropertiesProviderImpl implements PropertiesProvider {
 
-    private String url;
-    private String keyWords;
-    private String city;
+    private volatile String url;
+    private volatile String keyWords;
+    private volatile String city;
 
     @Override
     public String getUrl() {

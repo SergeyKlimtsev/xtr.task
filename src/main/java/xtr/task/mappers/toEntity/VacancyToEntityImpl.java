@@ -1,5 +1,6 @@
 package xtr.task.mappers.toEntity;
 
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import xtr.task.json.Address;
@@ -21,9 +22,9 @@ public class VacancyToEntityImpl implements VacancyToEntity {
 
     @Override
     public Vacancy transform(VacancyJson vacancy) {
-        final Address address = Optional.ofNullable(vacancy.getAddress()).orElse(new Address());
-        final Salary salary = Optional.ofNullable(vacancy.getSalary()).orElse(new Salary());
-        final Employer employer = Optional.ofNullable(employerMapper.transform(vacancy.getEmployer())).orElse(new Employer());
+        val address = Optional.ofNullable(vacancy.getAddress()).orElse(new Address());
+        val salary = Optional.ofNullable(vacancy.getSalary()).orElse(new Salary());
+        val employer = Optional.ofNullable(employerMapper.transform(vacancy.getEmployer())).orElse(new Employer());
 
         employer.setBuilding(address.getBuilding());
         employer.setCity(address.getCity());

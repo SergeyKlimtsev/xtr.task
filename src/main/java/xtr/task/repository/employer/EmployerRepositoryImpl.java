@@ -1,5 +1,6 @@
 package xtr.task.repository.employer;
 
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,7 +47,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
 
     @Override
     public Page<Employer> getPage(Integer pageNumber, Integer pageSize) {
-        PageRequest pageRequest = new PageRequest(pageNumber - 1, pageSize);
+        val pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         return dao.findAll(pageRequest);
     }
 }

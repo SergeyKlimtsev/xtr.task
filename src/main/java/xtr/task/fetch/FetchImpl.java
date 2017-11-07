@@ -1,5 +1,6 @@
 package xtr.task.fetch;
 
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -36,7 +37,7 @@ public class FetchImpl implements Fetch {
     @Scheduled(fixedDelay = 10800000)
     @Override
     public void fetchVacancies() {
-        final VacanciesHolder vacanciesHolder = restTemplate.getForObject(createUrl(), VacanciesHolder.class);
+        val vacanciesHolder = restTemplate.getForObject(createUrl(), VacanciesHolder.class);
         vacancyService.addAll(vacancyMapper.transform(vacanciesHolder.getItems()));
     }
 

@@ -1,16 +1,16 @@
 package xtr.task.json;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
-/**
- * Created by root on 01.11.2017.
- */
+
 @Data
-@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Salary {
-    private String to;
-    private String gross;
-    private String from;
-    private String currency;
+    String to;
+    String gross;
+    String from;
+    String currency;
 }

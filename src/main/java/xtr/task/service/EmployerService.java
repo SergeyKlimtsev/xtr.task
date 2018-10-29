@@ -1,9 +1,6 @@
 package xtr.task.service;
 
-import xtr.task.model.Employer;
+import xtr.task.dto.EmployerDto;
 
-/**
- * Created by root on 05.11.2017.
- */
-public interface EmployerService extends CrudService<Employer> {
+public interface EmployerService extends CrudService<EmployerDto> {
 }

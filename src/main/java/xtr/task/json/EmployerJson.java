@@ -1,14 +1,14 @@
 package xtr.task.json;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
-/**
- * Created by root on 05.11.2017.
- */
+
 @Data
-@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class EmployerJson {
-    private String id;
-    private String name;
+  String id;
+  String name;
 }

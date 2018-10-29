@@ -1,50 +1,48 @@
 package xtr.task.controller;
 
-import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-import xtr.task.dto.VacancyDTO;
-import xtr.task.mappers.toDto.VacancyToDto;
-import xtr.task.model.Vacancy;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import xtr.task.dto.VacancyDto;
 import xtr.task.service.VacancyService;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-/**
- * Created by root on 05.11.2017.
- */
+@Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(value = VacancyController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class VacancyController {
-    static final String REST_URL = "/rest/vacancies";
+	static final String REST_URL = "/rest/vacancies";
 
-    @Autowired
-    private VacancyService vacancyService;
+	private final VacancyService vacancyService;
 
-    @Autowired
-    private VacancyToDto vacancyToDto;
+	@GetMapping("/pages")
+	public Page<VacancyDto> getPage(@RequestParam("pageNumber") Integer pageNumber,
+			@RequestParam("pageSize") Integer pageSize) {
+		log.trace("Vacancy page request pageNumber: {}, pageSize: {}", pageNumber, pageSize);
+		return vacancyService.getPage(pageNumber, pageSize);
+	}
 
-    @GetMapping("/pages")
-    public Page<VacancyDTO> getPage(@RequestParam("pageNumber") Integer pageNumber,
-                                    @RequestParam("pageSize") Integer pageSize) {
-        val page = vacancyService.<Vacancy>getPage(pageNumber, pageSize);
-        return page.map(item -> vacancyToDto.transform(item));
-    }
+	@GetMapping
+	public List<VacancyDto> getAll() {
+		log.trace("Vacancy get all request");
+		return vacancyService.getAll();
+	}
 
-    @GetMapping
-    public List<VacancyDTO> getAll() {
-        val allVacancies = vacancyService.getAll();
-        return allVacancies.stream().map(item -> vacancyToDto.transform(item)).collect(Collectors.toList());
-    }
-
-    @GetMapping("/{id}")
-    public VacancyDTO getOne(@PathVariable("id") int id) {
-        val vacancy = vacancyService.get(id);
-        return vacancyToDto.transform(vacancy);
-    }
+	@GetMapping("/{id}")
+	public VacancyDto getOne(@PathVariable("id") int id) {
+		log.trace("Vacancy get one request: {}", id);
+		return vacancyService.get(id);
+	}
 
 }
 

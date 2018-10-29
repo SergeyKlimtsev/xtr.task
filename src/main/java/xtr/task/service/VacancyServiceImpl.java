@@ -1,95 +1,100 @@
 package xtr.task.service;
 
-import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import javax.annotation.Nonnull;
+
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
+
+import lombok.AccessLevel;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
+import xtr.task.dto.VacancyDto;
 import xtr.task.exception.NotFoundException;
-import xtr.task.model.Employer;
-import xtr.task.model.Vacancy;
-import xtr.task.repository.employer.EmployerRepository;
-import xtr.task.repository.vacancy.VacancyRepository;
+import xtr.task.mappers.VacancyMapper;
+import xtr.task.repository.VacancyRepository;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.stream.Collectors;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-import static com.google.common.base.Preconditions.*;
-
-/**
- * Created by root on 05.11.2017.
- */
+@Transactional(readOnly = true)
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class VacancyServiceImpl implements VacancyService {
 
-    @Autowired
-    private VacancyRepository repository;
+	VacancyRepository repository;
+	VacancyMapper mapper;
 
-    @Autowired
-    private EmployerRepository employerRepository;
+	static final String CACHE_NAMESPACE = "vacancies";
 
-    @CacheEvict(value = "vacancies", allEntries = true)
-    @Transactional
-    @Override
-    public Vacancy add(Vacancy vacancy) {
-        checkNotNull(vacancy);
-        if (vacancy.getEmployer() != null) {
-            employerRepository.save(vacancy.getEmployer());
-        }
-        return repository.save(vacancy);
-    }
+	@CacheEvict(value = CACHE_NAMESPACE, allEntries = true)
+	@Transactional
+	@Override
+	public VacancyDto add(@NonNull VacancyDto vacancy) {
+		return Optional.of(vacancy)
+				.map(mapper::toEntity)
+				.map(repository::save)
+				.map(mapper::toDto)
+				.get();
+	}
 
-    @Transactional
-    @Override
-    public List<Vacancy> addAll(List<Vacancy> vacancies) {
-        val employers = vacancies.stream()
-                .map(Vacancy::getEmployer)
-                .collect(Collectors.toList());
-        employerRepository.saveAll(employers);
+	@Transactional
+	@Override
+	public List<VacancyDto> addAll(@NonNull List<VacancyDto> vacancies) {
+		return Optional.of(vacancies)
+				.map(mapper::toEntity)
+				.map(repository::saveAll)
+				.map(Lists::newArrayList)
+				.map(mapper::toDto)
+				.get();
+	}
 
-        return vacancies.stream().map(item -> repository.save(item)).collect(Collectors.toList());
-        // return repository.saveAll(vacancies);
-    }
+	@CacheEvict(value = CACHE_NAMESPACE, allEntries = true)
+	@Override
+	public void update(@NonNull VacancyDto vacancy) {
+		checkNotNull(vacancy.getId(), "Id of vacancy should be not null");
+		repository.save(mapper.toEntity(vacancy));
+	}
 
-    @CacheEvict(value = "vacancies", allEntries = true)
-    @Override
-    public void update(Vacancy vacancy) throws NotFoundException {
-        checkNotNull(vacancy);
-        checkNotNull(vacancy.getId(), "Id of vacancy should be not null");
-        repository.save(vacancy);
-    }
+	@CacheEvict(value = CACHE_NAMESPACE, allEntries = true)
+	@Override
+	public void delete(int id) {
+		repository.deleteById(id);
+	}
 
-    @CacheEvict(value = "vacancies", allEntries = true)
-    @Override
-    public void delete(int id) throws NotFoundException {
-        if (!repository.delete(id)) {
-            throw new NotFoundException(String.format("Vacancy for id=n% doesn't found", id));
-        }
-    }
+	@Cacheable(CACHE_NAMESPACE)
+	@Nonnull
+	@Override
+	public VacancyDto get(int id) throws NotFoundException {
+		return repository.findById(id)
+				.map(mapper::toDto)
+				.orElseThrow(() -> new NotFoundException(String.format("Vacancy for id=n% doesn't found", id)));
+	}
 
-    @Cacheable("vacancies")
-    @Nonnull
-    @Override
-    public Vacancy get(int id) throws NotFoundException {
-        val vacancy = repository.get(id);
-        if (vacancy == null) {
-            throw new NotFoundException(String.format("Vacancy for id=n% doesn't found", id));
-        }
-        return vacancy;
-    }
+	@Cacheable(CACHE_NAMESPACE)
+	@Override
+	public List<VacancyDto> getAll() {
+		return StreamSupport.stream(repository.findAll().spliterator(), false)
+				.map(mapper::toDto)
+				.collect(Collectors.toList());
+	}
 
-    @Cacheable("vacancies")
-    @Override
-    public List<Vacancy> getAll() {
-        return repository.getAll();
-    }
-
-    @Cacheable("vacancies")
-    @Override
-    public Page<Vacancy> getPage(Integer pageNumber, Integer pageSize) {
-        return repository.getPage(pageNumber, pageSize);
-    }
+	@Cacheable(CACHE_NAMESPACE)
+	@Override
+	public Page<VacancyDto> getPage(Integer pageNumber, Integer pageSize) {
+		return repository.findAll(PageRequest.of(pageNumber - 1, pageSize))
+				.map(mapper::toDto);
+	}
 }

@@ -1,43 +1,31 @@
 package xtr.task.model;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
-/**
- * Created by root on 01.11.2017.
- */
 @Entity
-@Table(name = "vacancy")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Vacancy {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	Integer id;
+	String name;
+	String salaryFrom;
+	String salaryTo;
+	String currency;
+	String url;
 
-    @Id
-    @Column
-    private Integer id;
-
-    @Column
-    private String name;
-
-    @Column(name = "salary_from")
-    private String salaryFrom;
-
-    @Column(name = "salary_to")
-    private String salaryTo;
-
-    @Column
-    private String currency;
-
-    @Column
-    private String url;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "employer_id")
-    private Employer employer;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "employer_id")
+	Employer employer;
 }

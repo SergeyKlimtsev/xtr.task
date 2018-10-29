@@ -1,40 +1,34 @@
 package xtr.task.model;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+
 import java.util.List;
 
-/**
- * Created by root on 01.11.2017.
- */
+@Accessors(chain = true)
 @Entity
-@Table(name = "employer")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Employer {
 
-    @Id
-    @Column
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	Integer id;
+	String name;
+	String building;
+	String city;
+	String street;
 
-    @Column
-    private String name;
-
-    @Column
-    private String building;
-
-    @Column
-    private String city;
-
-    @Column
-    private String street;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "employer")
-    private List<Vacancy> vacancies;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employer")
+	List<Vacancy> vacancies;
 }

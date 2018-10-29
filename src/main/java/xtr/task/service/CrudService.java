@@ -6,20 +6,23 @@ import xtr.task.exception.NotFoundException;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-/**
- * Created by root on 05.11.2017.
- */
+import lombok.SneakyThrows;
+
+
 public interface CrudService<T> {
     T add(T entity);
 
     List<T> addAll(List<T> entity);
 
-    void update(T entity) throws NotFoundException;
+    @SneakyThrows(NotFoundException.class)
+    void update(T entity);
 
-    void delete(int id) throws NotFoundException;
+    @SneakyThrows(NotFoundException.class)
+    void delete(int id);
 
+    @SneakyThrows(NotFoundException.class)
     @Nonnull
-    T get(int id) throws NotFoundException;
+    T get(int id);
 
     List<T> getAll();
 

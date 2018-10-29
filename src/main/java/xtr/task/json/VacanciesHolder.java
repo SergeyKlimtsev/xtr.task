@@ -1,15 +1,15 @@
 package xtr.task.json;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
-/**
- * Created by root on 05.11.2017.
- */
+
 @Data
-@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class VacanciesHolder {
-    private List<VacancyJson> items;
+     List<VacancyJson> items;
 }

@@ -2,17 +2,14 @@ package xtr.task.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import xtr.task.dto.SettingsDTO;
+import xtr.task.dto.SettingsDto;
 import xtr.task.fetch.Fetch;
 import xtr.task.properties.PropertiesProvider;
 
 import static org.springframework.util.StringUtils.*;
 
-/**
- * Created by root on 05.11.2017.
- */
+
 @RestController
 @RequestMapping(value = SettingsController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class SettingsController {
@@ -25,8 +22,8 @@ public class SettingsController {
     private Fetch fetch;
 
     @GetMapping
-    public SettingsDTO getSettings() {
-        return SettingsDTO.builder()
+    public SettingsDto getSettings() {
+        return SettingsDto.builder()
                 .url(propertiesProvider.getUrl())
                 .city(propertiesProvider.getCity())
                 .keyWords(propertiesProvider.getKeyWords())
@@ -34,7 +31,7 @@ public class SettingsController {
     }
 
     @PostMapping
-    public void setSettings(@RequestBody SettingsDTO settings) {
+    public void setSettings(@RequestBody SettingsDto settings) {
         if (!isEmpty(settings.getCity())) propertiesProvider.setCity(settings.getCity());
 
         if (!isEmpty(settings.getKeyWords())) propertiesProvider.setKeyWords(settings.getKeyWords());

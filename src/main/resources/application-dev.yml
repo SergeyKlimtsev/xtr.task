@@ -1,0 +1,37 @@
+logging:
+  file: ${logging.path}/xtr-task.log
+  level:
+    xtr:
+      task: TRACE
+    org:
+      hibernate:
+        SQL: DEGUB
+        type: trace
+      apache:
+        http:
+          wire: DEBUG
+      springframework:
+        web:
+          client: DEBUG
+        boot:
+          actuate: INFO
+          web:
+            servlet: INFO
+    root: INFO
+  path: logs
+  pattern:
+    console: '%d{ISO8601} %magenta([%thread]) %highlight(%-5level) %gray([%40.40logger{40}][%4.4L])
+            - %msg%n'
+    file: '%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n'
+
+spring:
+  datasource:
+      url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+      password: sa
+      username: sa
+      driver-class-name: org.h2.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+    show-sql: true

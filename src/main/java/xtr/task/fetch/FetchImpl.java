@@ -26,7 +26,8 @@ public class FetchImpl implements Fetch {
 	 VacancyMapper vacancyMapper;
 	 RestTemplate restTemplate;
 
-	@Scheduled(cron = "0 0 0/6 1/1 * ? *")
+	 // Fixed delay on every 3 hours
+	@Scheduled(fixedDelay = 10800000)
 	@Override
 	public void fetchVacancies() {
 		val vacanciesHolder = restTemplate.getForObject(createUrl(), VacanciesHolder.class);

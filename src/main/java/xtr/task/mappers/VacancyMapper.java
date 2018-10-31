@@ -26,14 +26,14 @@ public abstract class VacancyMapper {
 
 	public abstract List<Vacancy> toEntity(Iterable<VacancyDto> vacancies);
 
+	public abstract List<Vacancy> toEntityFromJson(Iterable<VacancyJson> vacancies);
+
 	@Mappings({
 			@Mapping(target = "salaryFrom", source = "vacancy.salary.from"),
 			@Mapping(target = "salaryTo", source = "vacancy.salary.to"),
 			@Mapping(target = "currency", source = "vacancy.salary.currency")
 	})
-	public abstract VacancyDto toEntity(VacancyJson vacancy);
-
-	public abstract List<VacancyDto> toEntityFromJson(Iterable<VacancyJson> vacancy);
+	public abstract Vacancy toEntityFromJson(VacancyJson vacancy);
 
 	@AfterMapping
 	protected void afterToEntity(final VacancyJson vacancyJson, @MappingTarget final Vacancy vacancy) {

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import javax.annotation.Nonnull;
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -22,8 +23,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import xtr.task.dto.VacancyDto;
-import xtr.task.exception.NotFoundException;
 import xtr.task.mappers.VacancyMapper;
+import xtr.task.model.Vacancy;
 import xtr.task.repository.VacancyRepository;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -50,6 +51,7 @@ public class VacancyServiceImpl implements VacancyService {
 				.get();
 	}
 
+	@CacheEvict(value = CACHE_NAMESPACE, allEntries = true)
 	@Transactional
 	@Override
 	public List<VacancyDto> addAll(@NonNull List<VacancyDto> vacancies) {
@@ -57,6 +59,16 @@ public class VacancyServiceImpl implements VacancyService {
 				.map(mapper::toEntity)
 				.map(repository::saveAll)
 				.map(Lists::newArrayList)
+				.map(mapper::toDto)
+				.get();
+	}
+
+	@CacheEvict(value = CACHE_NAMESPACE, allEntries = true)
+	@Transactional
+	@Override
+	public List<VacancyDto> addAll(Iterable<Vacancy> vacancies) {
+		return Optional.of(vacancies)
+				.map(repository::saveAll)
 				.map(mapper::toDto)
 				.get();
 	}
@@ -77,10 +89,10 @@ public class VacancyServiceImpl implements VacancyService {
 	@Cacheable(CACHE_NAMESPACE)
 	@Nonnull
 	@Override
-	public VacancyDto get(int id) throws NotFoundException {
+	public VacancyDto get(int id) {
 		return repository.findById(id)
 				.map(mapper::toDto)
-				.orElseThrow(() -> new NotFoundException(String.format("Vacancy for id=n% doesn't found", id)));
+				.orElseThrow(() -> new EntityNotFoundException(String.format("Vacancy for id=n% doesn't found", id)));
 	}
 
 	@Cacheable(CACHE_NAMESPACE)
@@ -97,4 +109,6 @@ public class VacancyServiceImpl implements VacancyService {
 		return repository.findAll(PageRequest.of(pageNumber - 1, pageSize))
 				.map(mapper::toDto);
 	}
+
+
 }

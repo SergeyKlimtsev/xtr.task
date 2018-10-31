@@ -1,0 +1,14 @@
+fetch:
+  city: Екатеринбург
+  key:
+    words: java
+  url: https://api.hh.ru/vacancies
+
+server:
+  address: 0.0.0.0
+  port: 4545
+
+spring:
+  cache:
+    jcache:
+      config: classpath:cache/ehcache.xml

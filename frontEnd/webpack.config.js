@@ -80,7 +80,7 @@ module.exports = {
         headers: {'Access-Control-Allow-Origin': '*'/*, 'Access-Control-Expose-Headers': 'token'*/},
         proxy: [{
             context: ['/rest/**'],
-            target: 'http://localhost:8080',
+            target: 'http://localhost:4545',
             changeOrigin: true
         }]
     }

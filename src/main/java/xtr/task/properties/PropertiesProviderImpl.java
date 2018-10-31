@@ -1,52 +1,55 @@
 package xtr.task.properties;
 
+import lombok.AccessLevel;
 import lombok.Synchronized;
+import lombok.experimental.FieldDefaults;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-/**
- * Created by root on 05.11.2017.
- */
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Component
 public class PropertiesProviderImpl implements PropertiesProvider {
 
-    private volatile String url;
-    private volatile String keyWords;
-    private volatile String city;
+	volatile String url;
+	volatile String keyWords;
+	volatile String city;
 
-    @Override
-    public String getUrl() {
-        return url;
-    }
+	final Object setLock = new Object();
 
-    @Value("${fetch.url}")
-    @Synchronized
-    @Override
-    public void setUrl(String url) {
-        this.url = url;
-    }
+	@Override
+	public String getUrl() {
+		return url;
+	}
 
-    @Override
-    public String getKeyWords() {
-        return keyWords;
-    }
+	@Value("${fetch.url}")
+	@Synchronized("setLock")
+	@Override
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
-    @Value("${fetch.key.words}")
-    @Synchronized
-    @Override
-    public void setKeyWords(String keyWords) {
-        this.keyWords = keyWords;
-    }
+	@Override
+	public String getKeyWords() {
+		return keyWords;
+	}
 
-    @Override
-    public String getCity() {
-        return city;
-    }
+	@Value("${fetch.key.words}")
+	@Synchronized("setLock")
+	@Override
+	public void setKeyWords(String keyWords) {
+		this.keyWords = keyWords;
+	}
 
-    @Value("${fetch.city}")
-    @Synchronized
-    @Override
-    public void setCity(String city) {
-        this.city = city;
-    }
+	@Override
+	public String getCity() {
+		return city;
+	}
+
+	@Value("${fetch.city}")
+	@Synchronized("setLock")
+	@Override
+	public void setCity(String city) {
+		this.city = city;
+	}
 }

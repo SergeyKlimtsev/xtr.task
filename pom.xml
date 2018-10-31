@@ -7,7 +7,6 @@
 	<groupId>xtr</groupId>
 	<artifactId>xtr.task</artifactId>
 	<version>1.0-SNAPSHOT</version>
-	<packaging>war</packaging>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -22,7 +21,9 @@
 		<mapstruct.version>1.2.0.Final</mapstruct.version>
 
 		<lombok.version>1.18.2</lombok.version>
+		<h2.driver.version>1.4.197</h2.driver.version>
 		<guava.version>27.0-jre</guava.version>
+		<junit.version>5.3.1</junit.version>
 		<mockito.version>2.22.0</mockito.version>
 		<assertj.version>3.11.1</assertj.version>
 	</properties>
@@ -110,6 +111,14 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>${lombok.version}</version>
+		</dependency>
+
+		<!--Drivers -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2.driver.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 
 		<!-- Testing -->

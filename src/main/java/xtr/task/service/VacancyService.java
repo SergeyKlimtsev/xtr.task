@@ -1,9 +1,11 @@
 package xtr.task.service;
 
-import xtr.task.dto.VacancyDto;
+import java.util.List;
 
-/**
- * Created by root on 05.11.2017.
- */
+import xtr.task.dto.VacancyDto;
+import xtr.task.model.Vacancy;
+
+
 public interface VacancyService extends CrudService<VacancyDto> {
+	List<VacancyDto> addAll(Iterable<Vacancy> vacancies);
 }

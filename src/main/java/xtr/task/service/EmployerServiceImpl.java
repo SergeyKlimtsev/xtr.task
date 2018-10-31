@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import javax.annotation.Nonnull;
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import xtr.task.dto.EmployerDto;
-import xtr.task.exception.NotFoundException;
 import xtr.task.mappers.EmployerMapper;
 import xtr.task.repository.EmployerRepository;
 
@@ -57,24 +57,24 @@ public class EmployerServiceImpl implements EmployerService {
 
 	@CacheEvict(value = CACHE_NAMESPACE, allEntries = true)
 	@Override
-	public void update(@NonNull EmployerDto employer) throws NotFoundException {
+	public void update(@NonNull EmployerDto employer){
 		checkNotNull(employer.getId(), "Id of employer should be not null");
 		repository.save(mapper.toEntity(employer));
 	}
 
 	@CacheEvict(value = CACHE_NAMESPACE, allEntries = true)
 	@Override
-	public void delete(int id) throws NotFoundException {
+	public void delete(int id) {
 		repository.deleteById(id);
 	}
 
 	@Cacheable(CACHE_NAMESPACE)
 	@Nonnull
 	@Override
-	public EmployerDto get(int id) throws NotFoundException {
+	public EmployerDto get(int id) {
 		return repository.findById(id)
 				.map(mapper::toDto)
-				.orElseThrow(() -> new NotFoundException(String.format("Employer for id=n% doesn't found", id)));
+				.orElseThrow(() -> new EntityNotFoundException(String.format("Employer for id=n% doesn't found", id)));
 	}
 
 	@Cacheable(CACHE_NAMESPACE)

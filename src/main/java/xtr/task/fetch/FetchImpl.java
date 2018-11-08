@@ -1,5 +1,9 @@
 package xtr.task.fetch;
 
+import java.util.Optional;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -21,17 +25,19 @@ import xtr.task.service.VacancyService;
 @Component
 public class FetchImpl implements Fetch {
 
-	 PropertiesProvider properties;
-	 VacancyService vacancyService;
-	 VacancyMapper vacancyMapper;
-	 RestTemplate restTemplate;
+	PropertiesProvider properties;
+	VacancyService vacancyService;
+	VacancyMapper vacancyMapper;
+	RestTemplate restTemplate;
 
-	 // Fixed delay on every 3 hours
+	// Fixed delay on every 3 hours
 	@Scheduled(fixedDelay = 10800000)
+	@PostConstruct
 	@Override
 	public void fetchVacancies() {
 		val vacanciesHolder = restTemplate.getForObject(createUrl(), VacanciesHolder.class);
-		vacancyService.addAll(vacancyMapper.toEntityFromJson(vacanciesHolder.getItems()));
+		Optional.ofNullable(vacanciesHolder)
+				.ifPresent(holder -> vacancyService.addAll(vacancyMapper.toEntityFromJson(holder.getItems())));
 	}
 
 

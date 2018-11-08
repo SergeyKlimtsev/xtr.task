@@ -92,7 +92,7 @@ public class VacancyServiceImpl implements VacancyService {
 	public VacancyDto get(int id) {
 		return repository.findById(id)
 				.map(mapper::toDto)
-				.orElseThrow(() -> new EntityNotFoundException(String.format("Vacancy for id=n% doesn't found", id)));
+				.orElseThrow(() -> new EntityNotFoundException("Vacancy not found by id: " + id));
 	}
 
 	@Cacheable(CACHE_NAMESPACE)

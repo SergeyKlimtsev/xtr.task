@@ -37,7 +37,8 @@ public abstract class VacancyMapper {
 
 	@AfterMapping
 	protected void afterToEntity(final VacancyJson vacancyJson, @MappingTarget final Vacancy vacancy) {
-		val employer = Optional.ofNullable(vacancy.getEmployer()).orElseGet(Employer::new);
+		val employer = Optional.ofNullable(vacancy.getEmployer())
+				.orElseGet(Employer::new);
 
 		Optional.ofNullable(vacancyJson.getAddress())
 				.ifPresent(addr -> employer

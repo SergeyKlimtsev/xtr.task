@@ -1,9 +1,22 @@
-Запуск
+How to start application
 -------
-Необходимо:
-Java 8
-Maven
+Required:
+* Java 8
+* Maven
+* NodeJs
 
-mvn clean package jetty:run
+Build and run spring boot application
+>mvn -Dspring-boot.run.profiles=local -Dmaven.test.skip=true package spring-boot:run
 
-localhost:8080
+Check swagger ui availability:
+>http://localhost:4545/swagger-ui.html
+
+Run webpack dev server:
+>cd frontEnd
+
+>npm i
+
+>npm run devServer
+
+Check ui:
+>localhost:3001
